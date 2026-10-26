@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}ShopStack — Everyday essentials{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">THE EVERYDAY EDIT</span>
+    <h1>Good finds.<br><span>Better everyday.</span></h1>
+    <p>Useful things for work, home, and wherever the day takes you.</p>
+    <a class="button button-dark" href="#products">Explore collection <span>↘</span></a>
+  </div>
+  <div class="hero-art" aria-label="Shopping bags illustration">
+    <div class="sun"></div><div class="hero-bag bag-one">S</div><div class="hero-bag bag-two">✦</div>
+    <div class="hero-note">Small things.<br>Big difference.</div>
+  </div>
+</section>
+
+<section class="benefits">
+  <div><span class="benefit-icon">↗</span><div><strong>Thoughtful picks</strong><small>Useful, everyday products</small></div></div>
+  <div><span class="benefit-icon">◇</span><div><strong>Simple shopping</strong><small>No-fuss checkout demo</small></div></div>
+  <div><span class="benefit-icon">♡</span><div><strong>Made for daily life</strong><small>Little upgrades that last</small></div></div>
+</section>
+
+<section class="section-heading" id="products">
+  <div><span class="eyebrow">FIND YOUR NEXT FAVOURITE</span><h2>Shop the collection</h2></div>
+  <span class="product-count">{{ products|length }} items</span>
+</section>
+
+<form class="filters" method="get" action="{{ url_for('index') }}">
+  <div class="category-pills">
+    {% for cat in categories %}
+      <button class="pill {% if selected_category == cat %}active{% endif %}" type="submit" name="category" value="{{ cat }}">{{ cat }}</button>
+    {% endfor %}
+  </div>
+  <div class="search-box">
+    <input type="search" name="q" value="{{ query }}" placeholder="Search products..." aria-label="Search products">
+    {% if selected_category != "All" %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+    <button type="submit" aria-label="Search">⌕</button>
+  </div>
+</form>
+
+<div class="product-grid">
+  {% for product in products %}
+  <article class="product-card">
+    <div class="product-visual visual-{{ loop.index0 % 6 }}">
+      {% if product.badge %}<span class="badge">{{ product.badge }}</span>{% endif %}
+      <span class="product-emoji">{{ product.emoji }}</span>
+      <span class="visual-number">0{{ loop.index }}</span>
+    </div>
+    <div class="product-info">
+      <div class="product-meta"><span>{{ product.category }}</span><span class="stock">{% if product.stock > 0 %}{{ product.stock }} in stock{% else %}Sold out{% endif %}</span></div>
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <div class="product-bottom">
+        <strong>${{ "%.2f"|format(product.price) }}</strong>
+        <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+          <button class="add-button" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Add to cart <span>+</span></button>
+        </form>
+      </div>
+    </div>
+  </article>
+  {% else %}
+    <div class="empty-state"><span>⌕</span><h3>No products found</h3><p>Try another search or category.</p><a href="{{ url_for('index') }}">Clear filters</a></div>
+  {% endfor %}
+</div>
+{% endblock %}

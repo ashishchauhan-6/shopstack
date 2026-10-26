@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Demo orders — ShopStack{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">DEVELOPMENT VIEW</span><h1>Recent orders</h1><p>Practice endpoint only; protect it before public deployment.</p></div>
+<div class="orders-table-wrap">
+<table class="orders-table"><thead><tr><th>Order</th><th>Customer</th><th>Email</th><th>Total</th><th>Status</th><th>Created</th></tr></thead>
+<tbody>
+{% for order in orders %}
+<tr><td>#SS-{{ "%05d"|format(order.id) }}</td><td>{{ order.customer_name }}</td><td>{{ order.email }}</td><td>${{ "%.2f"|format(order.total_amount) }}</td><td>{{ order.status|title }}</td><td>{{ order.created_at }}</td></tr>
+{% else %}
+<tr><td colspan="6">No orders yet. Place a demo order first.</td></tr>
+{% endfor %}
+</tbody></table></div>
+{% endblock %}

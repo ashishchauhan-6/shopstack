@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Order placed — ShopStack{% endblock %}
+{% block content %}
+<section class="success-card">
+  <div class="success-icon">✓</div><span class="eyebrow">ORDER CONFIRMED</span>
+  <h1>Thanks, {{ order.customer_name }}!</h1>
+  <p>Your demo order has been saved in the database.</p>
+  <div class="order-reference"><span>Order number</span><strong>#SS-{{ "%05d"|format(order.id) }}</strong></div>
+  <div class="order-reference"><span>Order total</span><strong>${{ "%.2f"|format(order.total_amount) }}</strong></div>
+  <div class="order-reference"><span>Status</span><strong class="status-tag">{{ order.status|title }}</strong></div>
+  <a class="button button-dark" href="{{ url_for('index') }}">Back to shopping <span>→</span></a>
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Checkout — ShopStack{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">ONE LAST STEP</span><h1>Checkout</h1><p>This is a demo checkout. No payment is collected.</p></div>
+<div class="checkout-layout">
+  <form class="form-card" method="post">
+    <h2>Your details</h2>
+    <label for="name">Full name</label><input id="name" name="name" required autocomplete="name" placeholder="e.g. Rahul Sharma">
+    <label for="email">Email address</label><input id="email" type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+    <button class="button button-dark full-width" type="submit">Place demo order <span>→</span></button>
+    <p class="form-note">Demo only — no real payment or shipping is processed.</p>
+  </form>
+  <aside class="summary-card">
+    <span class="eyebrow">ORDER SUMMARY</span>
+    {% for item in items %}
+    <div class="checkout-item"><span>{{ item.product.emoji }} {{ item.product.name }} × {{ item.quantity }}</span><strong>${{ "%.2f"|format(item.line_total) }}</strong></div>
+    {% endfor %}
+    <div class="summary-total"><span>Total</span><strong>${{ "%.2f"|format(total) }}</strong></div>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Your cart — ShopStack{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">YOUR SELECTION</span><h1>Your cart</h1><p>Review your items before checkout.</p></div>
+{% if items %}
+<div class="cart-layout">
+  <section class="cart-items">
+    {% for item in items %}
+    <article class="cart-item">
+      <div class="cart-emoji">{{ item.product.emoji }}</div>
+      <div class="cart-item-main"><span class="muted">{{ item.product.category }}</span><h3>{{ item.product.name }}</h3><strong>${{ "%.2f"|format(item.product.price) }}</strong></div>
+      <form class="quantity-form" method="post" action="{{ url_for('update_cart', product_id=item.product.id) }}">
+        <label for="qty-{{ item.product.id }}">Qty</label>
+        <input id="qty-{{ item.product.id }}" type="number" name="quantity" min="0" max="{{ item.product.stock }}" value="{{ item.quantity }}">
+        <button class="text-button" type="submit">Update</button>
+      </form>
+      <div class="line-total">${{ "%.2f"|format(item.line_total) }}</div>
+      <form method="post" action="{{ url_for('remove_from_cart', product_id=item.product.id) }}"><button class="remove-button" aria-label="Remove {{ item.product.name }}">×</button></form>
+    </article>
+    {% endfor %}
+  </section>
+  <aside class="summary-card">
+    <span class="eyebrow">ORDER SUMMARY</span><h2>Almost yours.</h2>
+    <div class="summary-row"><span>Subtotal</span><strong>${{ "%.2f"|format(total) }}</strong></div>
+    <div class="summary-row"><span>Shipping</span><strong>Free</strong></div>
+    <div class="summary-total"><span>Total</span><strong>${{ "%.2f"|format(total) }}</strong></div>
+    <a class="button button-dark full-width" href="{{ url_for('checkout') }}">Continue to checkout <span>→</span></a>
+    <a class="back-link" href="{{ url_for('index') }}">← Continue shopping</a>
+  </aside>
+</div>
+{% else %}
+<div class="empty-state cart-empty"><span>🛍️</span><h2>Your cart is taking a break</h2><p>Add a few good finds and they'll show up here.</p><a class="button button-dark" href="{{ url_for('index') }}">Explore products</a></div>
+{% endif %}
+{% endblock %}
